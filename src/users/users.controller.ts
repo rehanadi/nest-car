@@ -9,18 +9,17 @@ import {
   Query,
   NotFoundException,
   Session,
-  ForbiddenException,
   UseGuards,
 } from '@nestjs/common';
 import { CreateUserDto } from "./dtos/create-user.dto";
 import { UpdateUserDto } from "./dtos/update-user.dto";
 import { UsersService } from "./users.service";
 import { AuthService } from "./auth.service";
-import { Serialize } from "src/interceptors/serialize.interceptor";
+import { Serialize } from "../interceptors/serialize.interceptor";
 import { UserDto } from "./dtos/user.dto";
 import { CurrentUser } from "./decorators/current-user.decorator";
 import { User } from "./user.entity";
-import { AuthGuard } from "src/guards/auth.guard";
+import { AuthGuard } from "../guards/auth.guard";
 
 @Controller('auth')
 @Serialize(UserDto)
@@ -50,7 +49,7 @@ export class UsersController {
   }
 
   @Post('signin')
-  async signinUser(@Body() body: CreateUserDto, @Session() session: any) {
+  async signin(@Body() body: CreateUserDto, @Session() session: any) {
     const { email, password } = body;
     const user = await this.authService.signin(email, password);
     session.userId = user.id;
